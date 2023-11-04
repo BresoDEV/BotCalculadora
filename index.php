@@ -1,8 +1,8 @@
 <?php
 //?nome=Bot%20CdS%20EAD&tempoEspera=20&foto=Hank.png&tema=1
-$nome = "Breso";
+$nome = "BresoDEV Bot";
 $tempoEspera = 1000;
-$foto = 'Hank.png';
+$foto = 'https://yt3.googleusercontent.com/JOn2qFWSVZbOohyGSkWfoPNM_KkUyGcMg3S0WXt9N2FHRLHKVr5UyJL5UmpXLEG4cbyNZ9Xg=s900-c-k-c0x00ffffff-no-rj';
 $dark = '0';
 $nomeUsuario = '';
 
