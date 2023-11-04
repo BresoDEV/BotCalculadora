@@ -609,7 +609,7 @@ if (isset($_GET["nomeUsuario"]))
     //'+nomeUsuario+'
     function Ola() {
         const a = [
-            'Ei , ola'+nomeUsuario+', qual conta precisa que eu resolva pra voce?'+EmojiAleatorio(),
+            'Ei, ola'+nomeUsuario+', qual conta precisa que eu resolva pra voce?'+EmojiAleatorio(),
             'Ola'+nomeUsuario+', bora resolver umas continhas?'+EmojiAleatorio(),
             'Hey'+nomeUsuario+', oque manda pra hoje?'+EmojiAleatorio(),
             'Oi'+nomeUsuario+',oque voce precisa?'+EmojiAleatorio(), 
