@@ -1,24 +1,6 @@
-<?php
-//?nome=Bot%20CdS%20EAD&tempoEspera=20&foto=Hank.png&tema=1
-$nome = "BresoDEV Bot";
-$tempoEspera = 1000;
-$foto = 'https://yt3.googleusercontent.com/JOn2qFWSVZbOohyGSkWfoPNM_KkUyGcMg3S0WXt9N2FHRLHKVr5UyJL5UmpXLEG4cbyNZ9Xg=s900-c-k-c0x00ffffff-no-rj';
-$dark = '0';
-$nomeUsuario = '';
 
-if (isset($_GET["nome"]))
-    $nome = $_GET["nome"];
-if (isset($_GET["tempoEspera"]))
-    $tempoEspera = $_GET["tempoEspera"];
-if (isset($_GET["foto"]))
-    $foto = $_GET["foto"];
-if (isset($_GET["tema"]))
-    $dark = $_GET["tema"];
-if (isset($_GET["nomeUsuario"]))
-    $nomeUsuario = ' '.$_GET["nomeUsuario"];
-?>
 <!DOCTYPE html>
-<html lang="en" id="html">
+<html lang="pt-br" id="html">
 
 <head>
     <meta charset="UTF-8">
@@ -275,7 +257,7 @@ if (isset($_GET["nomeUsuario"]))
 <body id="body">
     <div class="topo" id="topo">
         <div class="avatar">
-            <img id="fotoperfil" src="Hank.png" alt="">
+            <img id="fotoperfil"  alt="">
 
         </div>
         <div class="nome" id="nome">Bot CdS EAD</div>
@@ -314,18 +296,74 @@ if (isset($_GET["nomeUsuario"]))
 </body>
 <script>
 
+
+//?nome=cu&foto=breso.png&meunome=edu&tempo=2000&tema=0
+
+
     //Responder('Olá Olá segue o link abaixo para fazer o download'+BotaoMsg('Baixar','www.google.com'));
     //Responder('Obrigado');
     //Responder('<img src="Hank.png" alt="" width="100%">');
     //Responder('<iframe src="http://www.google.com" frameborder="0" width="100%"></iframe>');
     //Responder(BotaoMsgDownload('x','http://localhost/index.php'));
 
-    var tempoResposta = <?php echo $tempoEspera ?>;
-    var nomeBot = "<?php echo $nome ?>";
-    var fotoperfil = "<?php echo $foto; ?>";
-    var tema = <?php echo $dark; ?>;
-    var nomeUsuario = '<?php echo $nomeUsuario; ?>';
 
+
+    //obter Dados do GET
+    const qs = window.location.search;
+    const get = new URLSearchParams(qs);
+
+//----------------------------------
+
+var tempoResposta = 1000;
+    var nomeBot = 'BresoDEV Bot';
+    var fotoperfil = 'breso.png';
+    var tema = '0';
+    var nomeUsuario = '';
+
+
+    if(get.get('tempo')){
+        tempoResposta = parseInt(get.get('tempo'));
+    }
+    if(localStorage.getItem('tempo')){
+        tempoResposta = parseInt(localStorage.getItem('tempo'));
+    }
+//------------------------------------------------
+    if(get.get('nome')){
+        nomeBot = get.get('nome');
+    }
+    else if(localStorage.getItem('nome')){
+        nomeBot = localStorage.getItem('nome');
+    }
+
+//------------------------------------------------
+    if(get.get('tema')){
+        tema = get.get('tema');
+    }
+    else if(localStorage.getItem('tema')){
+        tema = localStorage.getItem('tema');
+    }
+
+
+//------------------------------------------------
+    if(get.get('meunome')){
+        nomeUsuario = get.get('meunome');
+    }
+    else if(localStorage.getItem('meunome')){
+        nomeUsuario = localStorage.getItem('meunome');
+    }
+
+
+//------------------------------------------------
+    if(get.get('foto')){
+        fotoperfil = get.get('foto');
+    }
+    else if(localStorage.getItem('foto')){
+        fotoperfil = localStorage.getItem('foto');
+    }
+
+
+
+    //----------------------------------
     AplicarTema();
 
     document.getElementById('status').innerHTML = 'Visto por ultimo hoje as ' + HoraAntes();
@@ -359,7 +397,7 @@ if (isset($_GET["nomeUsuario"]))
         if(pergunta === '' || pergunta === ' ' || pergunta === '  ' )
         {
             boleta = false;
-            Responder('Ops'+nomeUsuario+', digite alguma coisa né hahaha assim não consigo te ajudar!!'+EmojiAleatorio());
+            Responder('Ops  '+nomeUsuario+', digite alguma coisa né hahaha assim não consigo te ajudar!!'+EmojiAleatorio());
         }
 
         if (pergunta.includes('/tema') && boleta) {
@@ -368,6 +406,9 @@ if (isset($_GET["nomeUsuario"]))
             const i = n.map(Number);
             tema = i[0] ;
             AplicarTema();
+
+            localStorage.setItem('tema',tema)
+
             Responder('Pronto, o tema foi alterado para ' + tema + ' ');
         }
         if (pergunta.includes('/tempo') && boleta) {
@@ -375,18 +416,27 @@ if (isset($_GET["nomeUsuario"]))
             const n = pergunta.match(/\d+/g);
             const i = n.map(Number);
             tempoResposta = i[0];
+
+            localStorage.setItem('tempo',tempoResposta)
+
             Responder('Pronto, o tempo de resposta foi alterado para ' + tempoResposta + ' milisegundos');
         }
         if (pergunta.includes('/nome') && boleta) {
             boleta = false;
             nomeBot = pergunta.replace('/nome ', '');;
             document.getElementById('nome').innerHTML = nomeBot;
+
+            localStorage.setItem('nome',nomeBot)
+
             Responder('Otimo, agora me chamo ' + nomeBot + '. Gostei!');
         }
 
         if (pergunta.includes('/meunome') && boleta) {
             boleta = false;
-            nomeUsuario = pergunta.replace('/meunome', '');;
+            nomeUsuario = pergunta.replace('/meunome', '');
+
+            localStorage.setItem('meunome',nomeUsuario)
+
             Responder('Prazer ' + nomeUsuario + '. Gostei do seu nome!');
         }
 
@@ -395,7 +445,20 @@ if (isset($_GET["nomeUsuario"]))
             boleta = false;
             fotoperfil = pergunta.replace('/foto ', '');;
             document.getElementById('fotoperfil').src = fotoperfil;
+
+            localStorage.setItem('foto',fotoperfil)
+
             Responder('Gostei da foto nova hehe');
+        }
+
+
+        if (pergunta.includes('/limpar') && boleta) {
+            boleta = false;
+            localStorage.clear();
+            Responder('Otimo,vamos reiniciar tudo!');
+            setTimeout(() => {
+                window.location.reload();
+            }, 4000);
         }
 
         if (pergunta.includes('/dev') && boleta) {
@@ -405,11 +468,13 @@ if (isset($_GET["nomeUsuario"]))
                 '<b>/tempo</b>: Muda o tempo de resposta em milisegundos<br>Ex: <i>/tempo 1000</i><br><br>' +
                 '<b>/tema</b>: Muda o tema de 0 a 3<br>Ex: <i>/tema 2</i><br><br>' +
                 '<b>/meunome</b>: Muda o seu nome<br>Ex: <i>/meunome Patolino</i><br><br>' +
-                '<b>OBS</b>: Lembrando que essas opções são temporárias, enquanto você estiver utilizando o chat.' +
-               '');
+                '<b>/foto</b>: Muda minha foto de perfil via link<br>Ex: <i>/foto Don.jpeg</i><br><br>' +
+                '<b>/limpar</b>: Limpa todas suas alterações<br>Ex: <i>/limpar</i><br><br>' +
+                '<b>OBS</b>: Todas modificações ficam salvas apenas para voce.<br>Voce pode personalizar tambem, enviando via <b>GET</b><br>' +
+               '<br>Ex: <b>?nome=PicaPau&foto=Don.jpeg&<br>meunome=Leoncio&tempo=1000<br>&tema=0</b><br><br>');
         }
 
-        if (pergunta.includes('bhaskara')) {
+        if (pergunta.includes('bhaskara') || pergunta.includes('Bhaskara')) {
             boleta = false;
             Responder('A famosa fórmula de Bhaskara é representada da seguinte forma:<br>\u0394 = b\u00B2 - 4ac<br>x\u2081 = (-b + \u221A\u0394) / 2a<br>x\u2082 = (-b - \u221A\u0394) / 2a');
         }
@@ -487,7 +552,7 @@ if (isset($_GET["nomeUsuario"]))
 
         palavra = [
             'raiz',
-            'quadrada',
+            //'quadrada',
         ];
         if (boleta) {
             palavra.forEach(valor => {
@@ -635,13 +700,13 @@ if (isset($_GET["nomeUsuario"]))
     }
 
 
-    //'+nomeUsuario+'
+    // '+nomeUsuario+'
     function SimbolosInvalidos() {
         const a = [
-            'Desculpe'+nomeUsuario+', não é possível calcular com os símbolos que você usou. Tente novamente com números e operadores válidos.' + triste,
-            'Parece que alguns símbolos que você usou não são reconhecidos. Por favor'+nomeUsuario+', use números e operadores válidos.' + triste,
-            'Ops'+nomeUsuario+', acho que você incluiu símbolos inválidos. Certifique-se de usar apenas números e operadores corretos nas contas.' + triste,
-            'Desculpe'+nomeUsuario+', mas os símbolos que você usou não são aceitos. Certifique-se de que sua conta contenha apenas números e operadores válidos.' + triste,
+            'Desculpe  '+nomeUsuario+', não é possível calcular com os símbolos que você usou. Tente novamente com números e operadores válidos.' + triste,
+            'Parece que alguns símbolos que você usou não são reconhecidos. Por favor  '+nomeUsuario+', use números e operadores válidos.' + triste,
+            'Ops  '+nomeUsuario+', acho que você incluiu símbolos inválidos. Certifique-se de usar apenas números e operadores corretos nas contas.' + triste,
+            'Desculpe  '+nomeUsuario+', mas os símbolos que você usou não são aceitos. Certifique-se de que sua conta contenha apenas números e operadores válidos.' + triste,
             'Os símbolos que você inseriu não são reconhecidos. Tente novamente com números e operadores apropriados.' + triste
 
         ];
@@ -649,26 +714,26 @@ if (isset($_GET["nomeUsuario"]))
         return a[ia];
     }
  
-    //'+nomeUsuario+'
+    // '+nomeUsuario+'
     function Ola() {
         const a = [
-            'Ei, ola'+nomeUsuario+', qual conta precisa que eu resolva pra voce?'+EmojiAleatorio(),
-            'Ola'+nomeUsuario+', bora resolver umas continhas?'+EmojiAleatorio(),
-            'Hey'+nomeUsuario+', oque manda pra hoje?'+EmojiAleatorio(),
-            'Oi'+nomeUsuario+',oque voce precisa?'+EmojiAleatorio(), 
+            'Ei, ola '+nomeUsuario+', qual conta precisa que eu resolva pra voce?'+EmojiAleatorio(),
+            'Ola '+nomeUsuario+', bora resolver umas continhas?'+EmojiAleatorio(),
+            'Hey '+nomeUsuario+', oque manda pra hoje?'+EmojiAleatorio(),
+            'Oi '+nomeUsuario+',oque voce precisa?'+EmojiAleatorio(), 
         ];
         const ia = Math.floor(Math.random() * a.length);
         return a[ia];
     }
 
 
-    //'+nomeUsuario+'
+    // '+nomeUsuario+'
     function Sim() {
         const a = [
-            'Que otimo saber disso'+nomeUsuario+', fico feliz em ter acertado'+confiante,
-            'Otimo'+nomeUsuario+', vamos para a próxima'+confiante,
-            'Perfeito'+nomeUsuario+', que bom que acertei'+confiante,
-            'Isso ai'+nomeUsuario+''+confiante,
+            'Que otimo saber disso '+nomeUsuario+', fico feliz em ter acertado'+confiante,
+            'Otimo '+nomeUsuario+', vamos para a próxima'+confiante,
+            'Perfeito '+nomeUsuario+', que bom que acertei'+confiante,
+            'Isso ai '+nomeUsuario+''+confiante,
         ];
         const ia = Math.floor(Math.random() * a.length);
         return a[ia];
@@ -676,13 +741,13 @@ if (isset($_GET["nomeUsuario"]))
 
 
 
-    //'+nomeUsuario+'
+    // '+nomeUsuario+'
     function Nao() {
         const a = [
-            'Oh, que pena'+nomeUsuario+', prometo melhorar da próxima vez'+triste,
-            'Desculpe'+nomeUsuario+' pelo erro'+triste,
-            'Acho que me enganei na conta'+nomeUsuario+', peço desculpas'+triste,
-            'Acho que li seus números errados'+nomeUsuario+', me desculpe, vou tentar melhorar na próxima'+confiante,
+            'Oh, que pena '+nomeUsuario+', prometo melhorar da próxima vez'+triste,
+            'Desculpe '+nomeUsuario+' pelo erro'+triste,
+            'Acho que me enganei na conta '+nomeUsuario+', peço desculpas'+triste,
+            'Acho que li seus números errados '+nomeUsuario+', me desculpe, vou tentar melhorar na próxima'+confiante,
         ];
         const ia = Math.floor(Math.random() * a.length);
         return a[ia];
@@ -706,19 +771,19 @@ if (isset($_GET["nomeUsuario"]))
     }
 
 
-    //'+nomeUsuario+'
+    // '+nomeUsuario+'
     function MontarDivisao(valor1, valor2, resultado) {
         const a = [
             'A divisão de ' + valor1 + ' por ' + valor2 + ', é ' + resultado,
-            'Entendi'+nomeUsuario+', a divisão de ' + valor1 + ' por ' + valor2 + ', resulta em ' + resultado + '. Acertei? ' + EmojiAleatorio(),
-            'Otimo'+nomeUsuario+',vamos calcular....<br>A divisão de ' + valor1 + ' por ' + valor2 + ', tem como resultado ' + resultado + '. Correto? ' + EmojiAleatorio(),
-            'Perfeito'+nomeUsuario+',um pouco mais dificil, mas vamos lá!!' + confiante + '<br>Se voce pegar ' + valor1 + ' e dividir ele por ' + valor2 + ', tem como resultado ' + resultado + '. Acertei né? ' + EmojiAleatorio(),
-            'Essa ficou facil demais'+nomeUsuario+'!!! vamos lá' + confiante + '<br>Se voce pegar ' + valor1 + ' e dividir ele por ' + valor2 + ', tem como resultado ' + resultado + '. Acertei né? ' + EmojiAleatorio(),
-            'Perfeito'+nomeUsuario+', um pouco mais complicado, mas a gente consegue!<br>Se você pegar ' + valor1 + ' e dividir por ' + valor2 + ', o resultado é ' + resultado + '. ',
+            'Entendi '+nomeUsuario+', a divisão de ' + valor1 + ' por ' + valor2 + ', resulta em ' + resultado + '. Acertei? ' + EmojiAleatorio(),
+            'Otimo '+nomeUsuario+',vamos calcular....<br>A divisão de ' + valor1 + ' por ' + valor2 + ', tem como resultado ' + resultado + '. Correto? ' + EmojiAleatorio(),
+            'Perfeito '+nomeUsuario+',um pouco mais dificil, mas vamos lá!!' + confiante + '<br>Se voce pegar ' + valor1 + ' e dividir ele por ' + valor2 + ', tem como resultado ' + resultado + '. Acertei né? ' + EmojiAleatorio(),
+            'Essa ficou facil demais '+nomeUsuario+'!!! vamos lá' + confiante + '<br>Se voce pegar ' + valor1 + ' e dividir ele por ' + valor2 + ', tem como resultado ' + resultado + '. Acertei né? ' + EmojiAleatorio(),
+            'Perfeito '+nomeUsuario+', um pouco mais complicado, mas a gente consegue!<br>Se você pegar ' + valor1 + ' e dividir por ' + valor2 + ', o resultado é ' + resultado + '. ',
             'Tudo certo, essa é uma pergunta mais desafiadora, mas não tem problema!<br>Se você dividir ' + valor1 + ' por ' + valor2 + ', o resultado é ' + resultado + '. ',
-            'Sem problemas, isso é um pouco mais difícil, mas vamos lá'+nomeUsuario+'!<br>Quando você divide ' + valor1 + ' por ' + valor2 + ', o resultado é ' + resultado + '. ',
-            'Entendi, isso é um desafio, mas a gente consegue'+nomeUsuario+'!<br>Se você pegar ' + valor1 + ' e dividir por ' + valor2 + ', o resultado é ' + resultado + '. ',
-            'Beleza, essa é mais complicadinha, mas não tem segredo'+nomeUsuario+'! <br>Quando você divide ' + valor1 + ' por ' + valor2 + ', o resultado é ' + resultado + '. '
+            'Sem problemas, isso é um pouco mais difícil, mas vamos lá '+nomeUsuario+'!<br>Quando você divide ' + valor1 + ' por ' + valor2 + ', o resultado é ' + resultado + '. ',
+            'Entendi, isso é um desafio, mas a gente consegue '+nomeUsuario+'!<br>Se você pegar ' + valor1 + ' e dividir por ' + valor2 + ', o resultado é ' + resultado + '. ',
+            'Beleza, essa é mais complicadinha, mas não tem segredo '+nomeUsuario+'! <br>Quando você divide ' + valor1 + ' por ' + valor2 + ', o resultado é ' + resultado + '. '
 
         ];
         const ia = Math.floor(Math.random() * a.length);
@@ -741,17 +806,17 @@ if (isset($_GET["nomeUsuario"]))
         }
     }
 
-    //'+nomeUsuario+'
+    // '+nomeUsuario+'
     function MontarSubtracao(valor1, valor2, resultado) {
         const a = [
-            'A subtração de ' + valor1 + ' de ' + valor2 + ', é ' + resultado + '. Algo mais'+nomeUsuario+'? ' + EmojiAleatorio(),
-            'Perfeito, ' + valor1 + ' menos ' + valor2 + ', é ' + resultado + '. Acertei'+nomeUsuario+'? ' + EmojiAleatorio(),
-            'Entendi'+nomeUsuario+', se temos ' + valor1 + ' e removemos ' + valor2 + ' dele, nos resta ' + resultado,
-            'Entendi, vou fazer a conta aqui'+nomeUsuario+', rapidinho. Se temos ' + valor1 + ' e removemos ' + valor2 + ' dele, nos resta ' + resultado,
-            'Entendi'+nomeUsuario+', se temos ' + valor1 + ' e removemos ' + valor2 + ' dele, nos resta ' + resultado,
-            'Legal'+nomeUsuario+', então, se a gente partir de ' + valor1 + ' e subtrair ' + valor2 + ', o resultado é ' + resultado,
-            'Beleza'+nomeUsuario+', se começarmos com ' + valor1 + 'e tirarmos ' + valor2 + ', o que sobra é ' + resultado,
-            'Entendi'+nomeUsuario+', se começarmos com ' + valor1 + ' e subtrairmos ' + valor2 + ', o resultado é ' + resultado,
+            'A subtração de ' + valor1 + ' de ' + valor2 + ', é ' + resultado + '. Algo mais '+nomeUsuario+'? ' + EmojiAleatorio(),
+            'Perfeito, ' + valor1 + ' menos ' + valor2 + ', é ' + resultado + '. Acertei '+nomeUsuario+'? ' + EmojiAleatorio(),
+            'Entendi '+nomeUsuario+', se temos ' + valor1 + ' e removemos ' + valor2 + ' dele, nos resta ' + resultado,
+            'Entendi, vou fazer a conta aqui '+nomeUsuario+', rapidinho. Se temos ' + valor1 + ' e removemos ' + valor2 + ' dele, nos resta ' + resultado,
+            'Entendi '+nomeUsuario+', se temos ' + valor1 + ' e removemos ' + valor2 + ' dele, nos resta ' + resultado,
+            'Legal '+nomeUsuario+', então, se a gente partir de ' + valor1 + ' e subtrair ' + valor2 + ', o resultado é ' + resultado,
+            'Beleza '+nomeUsuario+', se começarmos com ' + valor1 + 'e tirarmos ' + valor2 + ', o que sobra é ' + resultado,
+            'Entendi '+nomeUsuario+', se começarmos com ' + valor1 + ' e subtrairmos ' + valor2 + ', o resultado é ' + resultado,
             'Perfeito, se a gente remover ' + valor2 + ' de ' + valor1 + ', o resultado é ' + resultado
 
         ];
@@ -775,18 +840,18 @@ if (isset($_GET["nomeUsuario"]))
         }
     }
 
-    //'+nomeUsuario+'
+    // '+nomeUsuario+'
     function MontarMultiplicacao(valor1, valor2, resultado) {
         const a = [
             'A multiplicação de ' + valor1 + ' por ' + valor2 + ', é ' + resultado,
-            'Entendi'+nomeUsuario+', se voce pegar ' + valor1 + ' e fazer esse valor, vezes ' + valor2 + ', o resultado é ' + resultado,
-            'Agora ficou um pouco mais dificil'+nomeUsuario+'' + EmojiAleatorio() + ' mas vamos la, se voce pegar ' + valor1 + ' e fazer esse valor, vezes ' + valor2 + ', o resultado é ' + resultado,
+            'Entendi '+nomeUsuario+', se voce pegar ' + valor1 + ' e fazer esse valor, vezes ' + valor2 + ', o resultado é ' + resultado,
+            'Agora ficou um pouco mais dificil '+nomeUsuario+'' + EmojiAleatorio() + ' mas vamos la, se voce pegar ' + valor1 + ' e fazer esse valor, vezes ' + valor2 + ', o resultado é ' + resultado,
             'Perfeito, ' + valor1 + ' vezes ' + valor2 + ', é ' + resultado + ' ' + EmojiAleatorio(),
-            'Entendi'+nomeUsuario+', se você pegar ' + valor1 + ' e multiplicar por ' + valor2 + ', o resultado é ' + resultado,
-            'Legal, então'+nomeUsuario+', se a gente pegar ' + valor1 + ' e multiplicar por ' + valor2 + ', o resultado é ' + resultado,
-            'Beleza'+nomeUsuario+', se você pegar ' + valor1 + ' e fizer ' + valor2 + ' vezes, o resultado é ' + resultado,
+            'Entendi '+nomeUsuario+', se você pegar ' + valor1 + ' e multiplicar por ' + valor2 + ', o resultado é ' + resultado,
+            'Legal, então '+nomeUsuario+', se a gente pegar ' + valor1 + ' e multiplicar por ' + valor2 + ', o resultado é ' + resultado,
+            'Beleza '+nomeUsuario+', se você pegar ' + valor1 + ' e fizer ' + valor2 + ' vezes, o resultado é ' + resultado,
             'Entendi, se você pegar ' + valor1 + ' e multiplicar ele por ' + valor2 + ', o resultado é ' + resultado,
-            'Perfeito,'+nomeUsuario+' se você fizer ' + valor1 + ' vezes ' + valor2 + ', o resultado é ' + resultado
+            'Perfeito, '+nomeUsuario+' se você fizer ' + valor1 + ' vezes ' + valor2 + ', o resultado é ' + resultado
 
         ];
         const ia = Math.floor(Math.random() * a.length);
@@ -808,18 +873,18 @@ if (isset($_GET["nomeUsuario"]))
         }
     }
 
-    //'+nomeUsuario+'
+    // '+nomeUsuario+'
     function MontarSoma(valor1, valor2, resultado) {
         const a = [
-            'A soma de ' + valor1 + ' e ' + valor2 + ', é ' + resultado + '. Acertei'+nomeUsuario+'? ' + EmojiAleatorio(),
-            'Entendi, voce quer somar ' + valor1 + ' e ' + valor2 + '? Temos ' + resultado + '. Facil demais '+nomeUsuario+'' + EmojiAleatorio(),
-            'Vamos la, ' + valor1 + ' somado a ' + valor2 + ' temos ' + resultado + '. Próxima'+nomeUsuario+'... ' + EmojiAleatorio(),
-            'Perfeito, ' + valor1 + ' com ' + valor2 + ', temos ' + resultado + '. Estou ficando bom nisso'+nomeUsuario+'' + confiante,
-            'Entendi, você quer somar ' + valor1 + ' e ' + valor2 + '? O resultado é ' + resultado + '. Muito simples'+nomeUsuario+'! ' + EmojiAleatorio(),
-            'Legal, você quer somar ' + valor1 + ' com ' + valor2 + ', né? Deu ' + resultado + '. Moleza'+nomeUsuario+'! ' + EmojiAleatorio(),
-            'Beleza, você tá afim de somar ' + valor1 + ' e ' + valor2 + ', certo? Resultado: ' + resultado + '. Fácil demais'+nomeUsuario+'! ' + EmojiAleatorio(),
-            'Perfeito, você quer somar ' + valor1 + ' + ' + valor2 + '? O resultado é ' + resultado + '. Muito fácil'+nomeUsuario+'! ' + EmojiAleatorio(),
-            'Então, você deseja fazer a soma de ' + valor1 + ' com ' + valor2 + ', certo? Resultado: ' + resultado + '. Tá tranquilo'+nomeUsuario+'! ' + EmojiAleatorio(),
+            'A soma de ' + valor1 + ' e ' + valor2 + ', é ' + resultado + '. Acertei '+nomeUsuario+'? ' + EmojiAleatorio(),
+            'Entendi, voce quer somar ' + valor1 + ' e ' + valor2 + '? Temos ' + resultado + '. Facil demais  '+nomeUsuario+'' + EmojiAleatorio(),
+            'Vamos la, ' + valor1 + ' somado a ' + valor2 + ' temos ' + resultado + '. Próxima '+nomeUsuario+'... ' + EmojiAleatorio(),
+            'Perfeito, ' + valor1 + ' com ' + valor2 + ', temos ' + resultado + '. Estou ficando bom nisso '+nomeUsuario+'' + confiante,
+            'Entendi, você quer somar ' + valor1 + ' e ' + valor2 + '? O resultado é ' + resultado + '. Muito simples '+nomeUsuario+'! ' + EmojiAleatorio(),
+            'Legal, você quer somar ' + valor1 + ' com ' + valor2 + ', né? Deu ' + resultado + '. Moleza '+nomeUsuario+'! ' + EmojiAleatorio(),
+            'Beleza, você tá afim de somar ' + valor1 + ' e ' + valor2 + ', certo? Resultado: ' + resultado + '. Fácil demais '+nomeUsuario+'! ' + EmojiAleatorio(),
+            'Perfeito, você quer somar ' + valor1 + ' + ' + valor2 + '? O resultado é ' + resultado + '. Muito fácil '+nomeUsuario+'! ' + EmojiAleatorio(),
+            'Então, você deseja fazer a soma de ' + valor1 + ' com ' + valor2 + ', certo? Resultado: ' + resultado + '. Tá tranquilo '+nomeUsuario+'! ' + EmojiAleatorio(),
 
         ];
         const ia = Math.floor(Math.random() * a.length);
@@ -838,18 +903,18 @@ if (isset($_GET["nomeUsuario"]))
         }
     }
 
-    //'+nomeUsuario+'
+    // '+nomeUsuario+'
     function MontarRaiz(valor1, resultado) {
         const a = [
-            'Essa ficou fácil demais'+nomeUsuario+', a raiz quadrada de ' + valor1 + ' é ' + resultado,
-            'Legal'+nomeUsuario+', a raiz quadrada de ' + valor1 + ' é ' + resultado + '. Moleza!',
+            'Essa ficou fácil demais '+nomeUsuario+', a raiz quadrada de ' + valor1 + ' é ' + resultado,
+            'Legal '+nomeUsuario+', a raiz quadrada de ' + valor1 + ' é ' + resultado + '. Moleza!',
             'Beleza, quando calculamos a raiz quadrada de ' + valor1 + ', o resultado é ' + resultado,
-            'Entendi, a raiz quadrada de ' + valor1 + ' é ' + resultado + '. Facinho, né'+nomeUsuario+'?',
-            'Perfeito, a raiz quadrada de ' + valor1 + ' é ' + resultado + '. Simples assim'+nomeUsuario+'!',
+            'Entendi, a raiz quadrada de ' + valor1 + ' é ' + resultado + '. Facinho, né '+nomeUsuario+'?',
+            'Perfeito, a raiz quadrada de ' + valor1 + ' é ' + resultado + '. Simples assim '+nomeUsuario+'!',
             'Ok, a raiz quadrada de ' + valor1 + ' é ' + resultado + '. Acertei? ' + EmojiAleatorio(),
-            'Agora ficou dificil'+nomeUsuario+' haha, bom, raiz quadrada de ' + valor1 + ' é ' + resultado + ' ' + EmojiAleatorio(),
-            'Agora ficou dificil '+nomeUsuario+'' + rindo + ', mas bem, raiz quadrada de ' + valor1 + ' é ' + resultado + ' ' + EmojiAleatorio(),
-            'Essa ficou facil demais'+nomeUsuario+',a raiz quadrada de ' + valor1 + ' é ' + resultado + ' ' + confiante,
+            'Agora ficou dificil '+nomeUsuario+' haha, bom, raiz quadrada de ' + valor1 + ' é ' + resultado + ' ' + EmojiAleatorio(),
+            'Agora ficou dificil  '+nomeUsuario+'' + rindo + ', mas bem, raiz quadrada de ' + valor1 + ' é ' + resultado + ' ' + EmojiAleatorio(),
+            'Essa ficou facil demais '+nomeUsuario+',a raiz quadrada de ' + valor1 + ' é ' + resultado + ' ' + confiante,
         ];
         const ia = Math.floor(Math.random() * a.length);
         return a[ia];
@@ -870,59 +935,59 @@ if (isset($_GET["nomeUsuario"]))
         }
     }
 
-    //'+nomeUsuario+'
+    // '+nomeUsuario+'
     function MontarPotencia(valor1, valor2, resultado) {
         const a = [
             'Entendi, o valor ' + valor1 + ' elevado à potência ' + valor2 + ' é igual a ' + resultado,
-            'Legal, então'+nomeUsuario+', quando elevamos ' + valor1 + ' à potência ' + valor2 + ', obtemos ' + resultado,
-            'Beleza'+nomeUsuario+', se você calcular ' + valor1 + ' elevado a ' + valor2 + ', o resultado é ' + resultado,
+            'Legal, então '+nomeUsuario+', quando elevamos ' + valor1 + ' à potência ' + valor2 + ', obtemos ' + resultado,
+            'Beleza '+nomeUsuario+', se você calcular ' + valor1 + ' elevado a ' + valor2 + ', o resultado é ' + resultado,
             'Entendi, quando elevamos ' + valor1 + ' à potência ' + valor2 + ', o resultado é ' + resultado,
-            'Perfeito'+nomeUsuario+', o valor de ' + valor1 + ' elevado a ' + valor2 + ' é ' + resultado,
+            'Perfeito '+nomeUsuario+', o valor de ' + valor1 + ' elevado a ' + valor2 + ' é ' + resultado,
             'O valor ' + valor1 + ' elevado a potencia ' + valor2 + ', é ' + resultado,
-            'Entendi'+nomeUsuario+', se voce pegar o valor ' + valor1 + ', e elevar a potencia ' + valor2 + ', o resultado vai ser ' + resultado + '. Acertei'+nomeUsuario+'? ' + EmojiAleatorio(),
-            'Perfeito, o valor ' + valor1 + ', elevado a potencia de ' + valor2 + ', vai resultar em ' + resultado + '. Correto'+nomeUsuario+'? ' + EmojiAleatorio(),
-            'Entendi'+nomeUsuario+', o valor ' + valor1 + ', elevado a potencia de ' + valor2 + ', chegaremos em ' + resultado + '. Valor alto nao? ' + EmojiAleatorio(),
+            'Entendi '+nomeUsuario+', se voce pegar o valor ' + valor1 + ', e elevar a potencia ' + valor2 + ', o resultado vai ser ' + resultado + '. Acertei '+nomeUsuario+'? ' + EmojiAleatorio(),
+            'Perfeito, o valor ' + valor1 + ', elevado a potencia de ' + valor2 + ', vai resultar em ' + resultado + '. Correto '+nomeUsuario+'? ' + EmojiAleatorio(),
+            'Entendi '+nomeUsuario+', o valor ' + valor1 + ', elevado a potencia de ' + valor2 + ', chegaremos em ' + resultado + '. Valor alto nao? ' + EmojiAleatorio(),
         ];
         const ia = Math.floor(Math.random() * a.length);
         return a[ia];
     }
 
-    //'+nomeUsuario+'
+    // '+nomeUsuario+'
     function FaltouDigitarTodosNumeros(operacao, valorDigitado) {
         var a;
         if (operacao === "+") {
             a = [
-                'Ops'+nomeUsuario+', parece que você esqueceu de digitar um número para somar. Por favor, insira os números que deseja somar.',
-                'Faltou um número aí'+nomeUsuario+'! Lembre-se de incluir todos os números que você quer somar.',
-                'Você está quase lá'+nomeUsuario+', mas está faltando um número para a soma. Insira o número que está faltando.',
-                'Para realizar a soma'+nomeUsuario+', é importante que todos os números estejam presentes. Verifique se você incluiu todos os valores.',
-                'Parece que temos uma conta incompleta'+nomeUsuario+'. Certifique-se de incluir todos os números que deseja somar.'
+                'Ops '+nomeUsuario+', parece que você esqueceu de digitar um número para somar. Por favor, insira os números que deseja somar.',
+                'Faltou um número aí '+nomeUsuario+'! Lembre-se de incluir todos os números que você quer somar.',
+                'Você está quase lá '+nomeUsuario+', mas está faltando um número para a soma. Insira o número que está faltando.',
+                'Para realizar a soma '+nomeUsuario+', é importante que todos os números estejam presentes. Verifique se você incluiu todos os valores.',
+                'Parece que temos uma conta incompleta '+nomeUsuario+'. Certifique-se de incluir todos os números que deseja somar.'
             ];
         }
         if (operacao === "-") {
             a = [
-                'Ops'+nomeUsuario+', parece que você esqueceu de digitar um número para subtrair. Por favor, insira todos os números necessários para a operação.',
-                'Faltou um número aí'+nomeUsuario+'! Lembre-se de incluir todos os valores para a subtração.',
-                'Quase lá'+nomeUsuario+', mas está faltando um número para a operação de subtração. Insira o número que falta.',
-                'Para realizar a subtração'+nomeUsuario+', é importante que todos os números estejam presentes. Verifique se você incluiu todos os valores.',
-                'Parece que temos uma conta de subtração incompleta'+nomeUsuario+'. Certifique-se de incluir todos os números que deseja subtrair.'
+                'Ops '+nomeUsuario+', parece que você esqueceu de digitar um número para subtrair. Por favor, insira todos os números necessários para a operação.',
+                'Faltou um número aí '+nomeUsuario+'! Lembre-se de incluir todos os valores para a subtração.',
+                'Quase lá '+nomeUsuario+', mas está faltando um número para a operação de subtração. Insira o número que falta.',
+                'Para realizar a subtração '+nomeUsuario+', é importante que todos os números estejam presentes. Verifique se você incluiu todos os valores.',
+                'Parece que temos uma conta de subtração incompleta '+nomeUsuario+'. Certifique-se de incluir todos os números que deseja subtrair.'
 
             ];
         }
         if (operacao === "*") {
             a = [
-                'Ops'+nomeUsuario+', parece que você esqueceu de digitar um número para multiplicar. Certifique-se de incluir todos os números necessários.',
-                'Faltou um número aí'+nomeUsuario+'! Lembre-se de incluir todos os valores para a multiplicação.',
-                'Quase lá'+nomeUsuario+', mas está faltando um número para a operação de multiplicação. Insira o número que falta.',
-                'Para realizar a multiplicação'+nomeUsuario+', é importante que todos os números estejam presentes. Verifique se você incluiu todos os valores.',
-                'Parece que temos uma conta de multiplicação incompleta'+nomeUsuario+'. Certifique-se de incluir todos os números que deseja multiplicar.'
+                'Ops '+nomeUsuario+', parece que você esqueceu de digitar um número para multiplicar. Certifique-se de incluir todos os números necessários.',
+                'Faltou um número aí '+nomeUsuario+'! Lembre-se de incluir todos os valores para a multiplicação.',
+                'Quase lá '+nomeUsuario+', mas está faltando um número para a operação de multiplicação. Insira o número que falta.',
+                'Para realizar a multiplicação '+nomeUsuario+', é importante que todos os números estejam presentes. Verifique se você incluiu todos os valores.',
+                'Parece que temos uma conta de multiplicação incompleta '+nomeUsuario+'. Certifique-se de incluir todos os números que deseja multiplicar.'
             ];
         }
         if (operacao === "/") {
             a = [
-                'Ops'+nomeUsuario+', parece que você esqueceu de digitar um número para a divisão. Certifique-se de incluir todos os números necessários para a operação.',
-                'Faltou um número aí'+nomeUsuario+'! Lembre-se de incluir todos os valores para a divisão.',
-                'Quase lá'+nomeUsuario+', mas está faltando um número para a operação de divisão. Insira o número que falta.',
+                'Ops '+nomeUsuario+', parece que você esqueceu de digitar um número para a divisão. Certifique-se de incluir todos os números necessários para a operação.',
+                'Faltou um número aí '+nomeUsuario+'! Lembre-se de incluir todos os valores para a divisão.',
+                'Quase lá '+nomeUsuario+', mas está faltando um número para a operação de divisão. Insira o número que falta.',
                 'Para realizar a divisão, é importante que todos os números estejam presentes. Verifique se você incluiu todos os valores.',
                 'Parece que temos uma conta de divisão incompleta. Certifique-se de incluir todos os números que deseja dividir.'
 
@@ -930,9 +995,9 @@ if (isset($_GET["nomeUsuario"]))
         }
         if (operacao === "pot") {
             a = [
-                'Ops'+nomeUsuario+', parece que você esqueceu de digitar um número para calcular a potência. Certifique-se de incluir todos os números necessários para a operação.',
-                'Faltou um número aí'+nomeUsuario+'! Lembre-se de incluir todos os valores para a potenciação.',
-                'Quase lá'+nomeUsuario+', mas está faltando um número para o cálculo da potência. Insira o número que falta.',
+                'Ops '+nomeUsuario+', parece que você esqueceu de digitar um número para calcular a potência. Certifique-se de incluir todos os números necessários para a operação.',
+                'Faltou um número aí '+nomeUsuario+'! Lembre-se de incluir todos os valores para a potenciação.',
+                'Quase lá '+nomeUsuario+', mas está faltando um número para o cálculo da potência. Insira o número que falta.',
                 'Para calcular a potência, é importante que todos os números estejam presentes. Verifique se você incluiu todos os valores.',
                 'Parece que temos um cálculo de potência incompleto. Certifique-se de incluir todos os números que deseja elevar.'
 
@@ -943,15 +1008,15 @@ if (isset($_GET["nomeUsuario"]))
         return a[ia];
     }
 
-    //'+nomeUsuario+'
+    // '+nomeUsuario+'
     function SemNumeros(operacao) {
 
         const a = [
-            'Parece que você não inseriu nenhum número. Por favor'+nomeUsuario+', insira os números necessários para a operação que deseja realizar.',
-            'Nenhum número'+nomeUsuario+'? Lembre-se de incluir pelo menos dois números para fazer uma conta.',
-            'Está faltando algum número aí'+nomeUsuario+'! Para qualquer operação matemática, você precisa de pelo menos dois números.',
-            'Ops, sem números não dá para calcular nada'+nomeUsuario+'! Certifique-se de inserir os valores necessários.',
-            'Tá faltando alguma coisa aí'+nomeUsuario+'. Para fazer uma conta, é importante ter pelo menos dois números.',
+            'Parece que você não inseriu nenhum número. Por favor '+nomeUsuario+', insira os números necessários para a operação que deseja realizar.',
+            'Nenhum número '+nomeUsuario+'? Lembre-se de incluir pelo menos dois números para fazer uma conta.',
+            'Está faltando algum número aí '+nomeUsuario+'! Para qualquer operação matemática, você precisa de pelo menos dois números.',
+            'Ops, sem números não dá para calcular nada '+nomeUsuario+'! Certifique-se de inserir os valores necessários.',
+            'Tá faltando alguma coisa aí '+nomeUsuario+'. Para fazer uma conta, é importante ter pelo menos dois números.',
         ];
 
         const ia = Math.floor(Math.random() * a.length);
@@ -1076,16 +1141,16 @@ if (isset($_GET["nomeUsuario"]))
 
 
 
-    //'+nomeUsuario+'
+    // '+nomeUsuario+'
     function FalouObrigado() {
         const a = [
-            'De nada'+nomeUsuario+'! Estou aqui para ajudar.' + EmojiAleatorio(),
-            'Você é sempre bem-vindo(a)'+nomeUsuario+'! Se precisar de mais ajuda, é só chamar.' + EmojiAleatorio(),
-            'Não há de quê'+nomeUsuario+'! Fico feliz em poder ajudar.' + EmojiAleatorio(),
+            'De nada '+nomeUsuario+'! Estou aqui para ajudar.' + EmojiAleatorio(),
+            'Você é sempre bem-vindo(a) '+nomeUsuario+'! Se precisar de mais ajuda, é só chamar.' + EmojiAleatorio(),
+            'Não há de quê '+nomeUsuario+'! Fico feliz em poder ajudar.' + EmojiAleatorio(),
             'É um prazer ajudar! Se tiver mais dúvidas, estou à disposição.' + EmojiAleatorio(),
             'Não mencione! Estou aqui para tornar as coisas mais fáceis para você.' + EmojiAleatorio(),
-            'Sem problema'+nomeUsuario+'! Qualquer coisa que você precisar, estou aqui para responder.' + EmojiAleatorio(),
-            'Estou à disposição sempre que precisar'+nomeUsuario+'. Agradeço por usar o meu serviço!' + EmojiAleatorio(),
+            'Sem problema '+nomeUsuario+'! Qualquer coisa que você precisar, estou aqui para responder.' + EmojiAleatorio(),
+            'Estou à disposição sempre que precisar '+nomeUsuario+'. Agradeço por usar o meu serviço!' + EmojiAleatorio(),
         ];
         const ia = Math.floor(Math.random() * a.length);
         return a[ia];
