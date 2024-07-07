@@ -328,11 +328,11 @@ var tempoResposta = 1000;
         tempoResposta = parseInt(localStorage.getItem('tempo'));
     }
 //------------------------------------------------
-    if(get.get('nome')){
-        nomeBot = get.get('nome');
+    if(get.get('nomeBotCalculadora')){
+        nomeBot = get.get('nomeBotCalculadora');
     }
-    else if(localStorage.getItem('nome')){
-        nomeBot = localStorage.getItem('nome');
+    else if(localStorage.getItem('nomeBotCalculadora')){
+        nomeBot = localStorage.getItem('nomeBotCalculadora');
     }
 
 //------------------------------------------------
@@ -426,7 +426,7 @@ var tempoResposta = 1000;
             nomeBot = pergunta.replace('/nome ', '');;
             document.getElementById('nome').innerHTML = nomeBot;
 
-            localStorage.setItem('nome',nomeBot)
+            localStorage.setItem('nomeBotCalculadora',nomeBot)
 
             Responder('Otimo, agora me chamo ' + nomeBot + '. Gostei!');
         }
